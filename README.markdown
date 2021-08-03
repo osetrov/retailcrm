@@ -113,3 +113,9 @@ body = {
 RetailcrmApi::Request.customers.create(body: body, suffix: "upload").body
 ```
 
+## Корпоративные клиенты
+
+```ruby
+RetailcrmApi::Request.customers_corporate.retrieve.body
+# => {:success=>true, :pagination=>{:limit=>20, :totalCount=>0, :currentPage=>1, :totalPageCount=>0}, :customersCorporate=>[]} 
+```
