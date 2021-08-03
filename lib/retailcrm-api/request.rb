@@ -48,7 +48,7 @@ module RetailcrmApi
     end
 
     def create(params: nil, headers: nil, body: {})
-      APIRequest.new(builder: self).post(params: params, headers: headers, suffix: 'update', body: body, suffix: 'create')
+      APIRequest.new(builder: self).post(params: params, headers: headers, suffix: 'create', body: body)
     ensure
       reset
     end

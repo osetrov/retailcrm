@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'retailcrm-api'
-  s.version     = '0.0.1'
+  s.version     = '0.0.2'
   s.date        = '2021-08-01'
   s.summary     = "RetailCRM API"
   s.description = ""
@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.email       = 'pavel.osetrov@me.com'
   s.files = Dir['lib/**/*', 'LICENSE', 'README.markdown']
 
-  s.homepage    = 'https://github.com/osetrov/retailcrm-api'
+  s.homepage    = 'https://github.com/osetrov/retailcrm'
   s.license       = 'MIT'
 
   s.add_dependency('faraday', '>= 0.16.0')

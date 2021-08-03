@@ -7,7 +7,6 @@ module RetailcrmApi
 
     def post(params: nil, headers: nil, suffix: nil, body: {}, first_time: true)
       validate_api_key
-
       begin
         response = self.rest_client(suffix).post do |request|
           configure_request(request: request, params: params, headers: headers, body: MultiJson.dump(body))

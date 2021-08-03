@@ -66,7 +66,30 @@ RetailcrmApi::Request.logger = MyLogger.new
 
 # Примеры
 
+## Расходы
+
+### [Получение списка расходов, удовлетворяющих заданному фильтру](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-costs)
+```ruby
+RetailcrmApi::Request.costs.retrieve.body
+# => {:success=>true, :pagination=>{:limit=>20, :totalCount=>296, :currentPage=>1, :totalPageCount=>15}, :costs=>[{:id=>296, :dateFrom=>"2021-07-29", :dateTo=>"2021-07-29", :summ=>13996, :costItem=>"products-purchase-price", :createdAt=>"2021-07-29 00:34:35", :order=>{:id=>36, :number=>"36C"}, :sites=>["b12-skillum-ru"]}]}
+```
+
+## Клиенты
+### [Получение списка клиентов, удовлетворяющих заданному фильтру](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-customers)
 ```ruby
 RetailcrmApi::Request.customers.retrieve.body
 #=> {:success=>true, :pagination=>{:limit=>20, :totalCount=>0, :currentPage=>1, :totalPageCount=>0}, :customers=>[]} 
+```
+### [Создание клиента](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-create)
+```ruby
+body = {
+  site: 'deppa',
+  customer: {
+    externalId: 1,
+    firstName: 'Павел',
+    lastName: 'Осетров'
+  }
+}
+RetailcrmApi::Request.customers.create(body: body).body
+#=> {:success=>true, :id=>54}
 ```
