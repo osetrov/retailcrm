@@ -1,0 +1,9 @@
+defaults: &defaults
+  API_KEY: '***'
+  API_ENDPOINT: 'https://yourdomain.retailcrm.ru'
+production:
+  <<: *defaults
+development:
+  <<: *defaults
+test:
+  <<: *defaults
