@@ -5,20 +5,24 @@ module RetailcrmApi
       @request_builder = builder
     end
 
-    def post(params: nil, headers: nil, suffix: nil, body: {})
+    def post(params: nil, headers: nil, suffix: nil, body: {}, first_time: true)
       validate_api_key
       begin
         response = self.rest_client(suffix).post do |request|
           configure_request(request: request, params: params, headers: headers, body: body)
         end
-        #parse_response(response)
-        response
+        parse_response(response)
       rescue => e
-        handle_error(e)
+        if e.response.dig(:status) == 403 && first_time
+          sleep(0.3.second)
+          self.post(params: params, headers: headers, suffix: suffix, body: body, first_time: false)
+        else
+          handle_error(e)
+        end
       end
     end
 
-    def get(params: nil, headers: nil)
+    def get(params: nil, headers: nil, first_time: true)
       validate_api_key
 
       begin
@@ -27,7 +31,12 @@ module RetailcrmApi
         end
         parse_response(response)
       rescue => e
-        handle_error(e)
+        if e.response.dig(:status) == 403 && first_time
+          sleep(0.3.second)
+          self.get(params: params, headers: headers, first_time: false)
+        else
+          handle_error(e)
+        end
       end
     end
 

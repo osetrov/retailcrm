@@ -52,7 +52,7 @@ module RetailcrmApi
     end
 
     def update(params: nil, headers: nil, body: {})
-      APIRequest.new(builder: self).post(params: params, headers: headers, suffix: 'update', body: body)
+      APIRequest.new(builder: self).post(params: params, headers: headers, suffix: 'edit', body: body)
     ensure
       reset
     end
@@ -63,8 +63,8 @@ module RetailcrmApi
       reset
     end
 
-    def delete(params: nil, headers: nil, suffix: 'delete')
-      APIRequest.new(builder: self).post(params: params, headers: headers)
+    def delete(params: nil, headers: nil)
+      APIRequest.new(builder: self).post(params: params, headers: headers, suffix: 'delete')
     ensure
       reset
     end
