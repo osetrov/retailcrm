@@ -2,7 +2,7 @@
 
 API wrapper для RetailCRM
 
-# Установка Ruby
+# Установка
 
 ## Ruby
     $ gem install retailcrm-api
@@ -93,3 +93,23 @@ body = {
 RetailcrmApi::Request.customers.create(body: body).body
 #=> {:success=>true, :id=>54}
 ```
+### [Пакетная загрузка клиентов](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-upload)
+```ruby
+body = {
+  site: 'deppa',
+  customers: [
+    {
+      externalId: 3,
+      firstName: 'Имя',
+      lastName: 'Фамилия'
+    },
+    {
+      externalId: 4,
+      firstName: 'Имя2',
+      lastName: 'Фамилия2'
+    }
+  ]
+}
+RetailcrmApi::Request.customers.create(body: body, suffix: "upload").body
+```
+

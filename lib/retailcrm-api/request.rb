@@ -6,8 +6,6 @@ module RetailcrmApi
     DEFAULT_OPEN_TIMEOUT = 60
 
     def initialize(api_key: nil, api_endpoint: nil, timeout: nil, open_timeout: nil, proxy: nil, faraday_adapter: nil, symbolize_keys: false, debug: false, logger: nil, test: false)
-      p "Request initialize #{api_key}"
-
       @path_parts = []
       @api_key = api_key || self.class.api_key || ENV['RETAILCRM_API_KEY']
       @api_key = @api_key.strip if @api_key
@@ -47,8 +45,8 @@ module RetailcrmApi
       @path_parts.join('/')
     end
 
-    def create(params: nil, headers: nil, body: {})
-      APIRequest.new(builder: self).post(params: params, headers: headers, suffix: 'create', body: body)
+    def create(params: nil, headers: nil, body: {}, suffix: 'create')
+      APIRequest.new(builder: self).post(params: params, headers: headers, suffix: suffix, body: body)
     ensure
       reset
     end

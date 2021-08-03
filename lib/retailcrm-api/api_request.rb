@@ -5,7 +5,7 @@ module RetailcrmApi
       @request_builder = builder
     end
 
-    def post(params: nil, headers: nil, suffix: nil, body: {}, first_time: true)
+    def post(params: nil, headers: nil, suffix: nil, body: {})
       validate_api_key
       begin
         response = self.rest_client(suffix).post do |request|
@@ -17,7 +17,7 @@ module RetailcrmApi
       end
     end
 
-    def get(params: nil, headers: nil, first_time: true)
+    def get(params: nil, headers: nil)
       validate_api_key
 
       begin
