@@ -83,7 +83,7 @@ RetailcrmApi::Request.customers.retrieve.body
 ### [Создание клиента](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-create)
 ```ruby
 body = {
-  site: 'deppa',
+  site: 'deppa-ru',
   customer: {
     externalId: 1,
     firstName: 'Павел',
@@ -96,7 +96,7 @@ RetailcrmApi::Request.customers.create(body: body).body
 ### [Пакетная загрузка клиентов](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-upload)
 ```ruby
 body = {
-  site: 'deppa',
+  site: 'deppa-ru',
   customers: [
     {
       externalId: 3,
@@ -114,8 +114,25 @@ RetailcrmApi::Request.customers.create(body: body, suffix: "upload").body
 ```
 
 ## Корпоративные клиенты
-
+### [Получение списка корпоративных клиентов, удовлетворяющих заданному фильтру](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-customers-corporate)
 ```ruby
 RetailcrmApi::Request.customers_corporate.retrieve.body
 # => {:success=>true, :pagination=>{:limit=>20, :totalCount=>0, :currentPage=>1, :totalPageCount=>0}, :customersCorporate=>[]} 
+```
+
+### [Пакетная загрузка корпоративных клиентов](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-corporate-upload)
+```ruby
+body = {
+  site: 'deppa-ru"',
+  customersCorporate: [
+    {
+      externalId: 3,
+      nickName: 'test1'
+    },
+    {
+      externalId: 4,
+      nickName: 'test2'
+    }
+  ]
+}
 ```

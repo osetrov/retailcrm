@@ -9,9 +9,10 @@ module RetailcrmApi
       validate_api_key
       begin
         response = self.rest_client(suffix).post do |request|
-          configure_request(request: request, params: params, headers: headers, body: MultiJson.dump(body))
+          configure_request(request: request, params: params, headers: headers, body: body)
         end
-        parse_response(response)
+        #parse_response(response)
+        response
       rescue => e
         handle_error(e)
       end
@@ -96,11 +97,14 @@ module RetailcrmApi
     def configure_request(request: nil, params: nil, headers: nil, body: nil)
       if request
         request.params.merge!(params) if params
-        request.headers['Content-Type'] = 'application/json'
+        request.headers['Content-Type'] = 'application/x-www-form-urlencoded'
         request.headers['X-API-KEY'] = "#{self.api_key}"
         request.headers['User-Agent'] = "RetailCrmApi/#{RetailcrmApi::VERSION} Ruby gem"
         request.headers.merge!(headers) if headers
-        request.body = body if body
+        if body
+          body.each { |k, v| body[k] = MultiJson.dump(v) }
+          request.body = URI.encode_www_form(body)
+        end
         request.options.timeout = self.timeout
         request.options.open_timeout = self.open_timeout
       end

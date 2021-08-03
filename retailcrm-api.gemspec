@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'retailcrm-api'
-  s.version     = '0.0.4'
+  s.version     = '0.0.5'
   s.date        = '2021-08-01'
   s.summary     = "RetailCRM API"
   s.description = ""
