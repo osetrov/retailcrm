@@ -1,6 +1,6 @@
 # RetailCRM API
 
-API wrapper для RetailCRM
+API wrapper для RetailCRM v5
 
 # Установка
 
@@ -152,6 +152,87 @@ params = {
 RetailcrmApi::Request.custom_fields.retrieve(params: params).body
 # =>{:success=>true, :pagination=>{:limit=>20, :totalCount=>0, :currentPage=>1, :totalPageCount=>0}, :customFields=>[]}
 ```
+### [Получение списка справочников, удовлетворяющих заданному фильтру](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-custom-fields-dictionaries)
+```ruby
+params = {
+  limit: 100,
+  filter: {
+    name: "test"
+  }
+}
+RetailcrmApi::Request.custom_fields.dictionaries.retrieve(params: params).body
+# => {:success=>true, :pagination=>{:limit=>100, :totalCount=>0, :currentPage=>1, :totalPageCount=>0}, :customDictionaries=>[]} 
+```
+### [Создание справочника](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-custom-fields-dictionaries-create)
+```ruby
+body = {
+  customDictionary: {
+    code: "test_custom",
+    name: "test custom",
+    elements: [
+      {
+        name: "Тест",
+        code: "test"
+      }
+    ]
+  }
+}
+RetailcrmApi::Request.custom_fields.dictionaries.create(body: body).body
+# => {:success=>true, :code=>"test_custom"}
+```
+### [Получение информации о справочнике](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-custom-fields-dictionaries-code)
+```ruby
+RetailcrmApi::Request.custom_fields.dictionaries("test_custom").retrieve.body
+# => {:success=>true, :customDictionary=>{:name=>"test custom", :code=>"test_custom", :elements=>[{:name=>"Тест", :code=>"test", :ordering=>50}]}} 
+```
+### [Редактирование справочика](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-custom-fields-dictionaries-code-edit)
+```ruby
+body = {
+  customDictionary: {
+    name: "test custom update",
+    elements: [
+      {
+        name: "Тест update",
+        code: "test"
+      }
+    ]
+  }
+}
+RetailcrmApi::Request.custom_fields.dictionaries("test_custom").update(body: body).body
+# => {:success=>true, :code=>"test_custom"}
+```
+### [Создание пользовательского поля](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-custom-fields-entity-create)
+```ruby
+entity = ["order", "customer", "customer_corporate", "company"].sample
+body = {
+  customField: {
+    name: "Тест",
+    code: "test",
+    type: "string"
+  }
+}
+RetailcrmApi::Request.custom_fields(entity).create(body: body).body
+# => {:success=>true, :code=>"test"}
+```
+### [Получение информации о пользовательском поле](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-custom-fields-entity-code)
+```ruby
+RetailcrmApi::Request.custom_fields(entity, "test").retrieve.body
+# => {:success=>true, :customField=>{:name=>"Тест", :code=>"test", :required=>false, :inFilter=>true, :inList=>true, :inGroupActions=>false, :type=>"string", :entity=>"customer", :ordering=>50, :viewMode=>"editable"}}
+```
+### [Редактирование пользовательского поля](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-custom-fields-entity-code-edit)
+```ruby
+body = {
+  customField: {
+    name: "Тест update",
+    code: "test",
+    type: "boolean"
+  }
+}
+RetailcrmApi::Request.custom_fields(entity, "test").update(body: body).body
+# => {:success=>true, :code=>"test"} 
+```
+
+
 
 ## Клиенты
 ### [Получение списка клиентов, удовлетворяющих заданному фильтру](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-customers)
