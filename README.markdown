@@ -573,25 +573,255 @@ RetailcrmApi::Request.customers(61).update(body: body, params: params).body
 ```
 ## <a name="customers-corporate"></a> Корпоративные клиенты
 ### <a name="get--api-v5-customers-corporate"></a> [Получение списка корпоративных клиентов, удовлетворяющих заданному фильтру](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-customers-corporate)
+```ruby
+params = {
+  limit: 100,
+  filter: {
+    vip: "1"
+  }
+}
+RetailcrmApi::Request.customers_corporate.retrieve(params: params).body
+#=> {:success=>true, :pagination=>{:limit=>100, :totalCount=>0, :currentPage=>1, :totalPageCount=>0}, :customersCorporate=>[]}
+```
 ### <a name="post--api-v5-customers-corporate-combine"></a> [Объединение корпоративных клиентов](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-corporate-combine)
+```ruby
+body = {
+  resultCustomer: {
+    id: 63
+  },
+  customers: [
+    {
+      id: 64
+    }
+  ]
+}
+RetailcrmApi::Request.customers_corporate.create(body: body, suffix: "combine").body
+#=> {:success=>true}
+```
 ### <a name="post--api-v5-customers-corporate-create"></a> [Создание корпоративного клиента](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-corporate-create)
+```ruby
+body = {
+  customerCorporate: {
+    externalId: 333,
+    vip: true,
+    nickName: "dhh"
+  }
+}
+RetailcrmApi::Request.customers_corporate.create(body: body).body
+#=> {:success=>true, :id=>62}
+```
 ### <a name="post--api-v5-customers-corporate-fix-external-ids"></a> [Массовая запись внешних ID корпоративных клиентов](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-corporate-fix-external-ids)
+```ruby
+body = {
+  customersCorporate: [
+    {
+      id: 63,
+      externalId: 12
+    },
+    {
+      id: 62,
+      externalId: 13
+    }
+  ]
+}
+RetailcrmApi::Request.customers_corporate.create(body: body, suffix: "fix-external-ids").body
+#=> {:success=>true} 
+```
 ### <a name="get--api-v5-customers-corporate-history"></a> [Получение истории изменения корпоративных клиентов](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-customers-corporate-history)
+```ruby
+params = {
+  filter: {
+    customerId: 63
+  }
+}
+RetailcrmApi::Request.customers_corporate.history.retrieve(params: params).body
+#=> {:success=>true, :generatedAt=>"2021-08-04 20:04:14", :history=>[{:id=>9, :createdAt=>"2021-08-04 19:58:50", :created=>true, :source=>"api", :field=>"id", :apiKey=>{:current=>true}, :oldValue=>nil, :newValue=>63, :customer=>{:type=>"customer_corporate", :id=>63, :externalId=>"44", :nickName=>"ryzhikov", :createdAt=>"2021-08-04 19:58:50", :vip=>false, :bad=>true, :site=>"deppa-ru", :marginSumm=>0, :totalSumm=>0, :averageSumm=>0, :ordersCount=>0, :customFields=>[], :personalDiscount=>0, :cumulativeDiscount=>0}}, {:id=>12, :createdAt=>"2021-08-04 20:03:15", :source=>"api", :field=>"external_id", :apiKey=>{:current=>true}, :oldValue=>"44", :newValue=>"12", :customer=>{:id=>63, :externalId=>"12", :site=>"deppa-ru"}}], :pagination=>{:limit=>100, :totalCount=>2, :currentPage=>1, :totalPageCount=>1}}
+```
 ### <a name="get--api-v5-customers-corporate-notes"></a> [Получение заметок](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-customers-corporate-notes)
+```ruby
+params = {
+  filter: {
+    customerIds: [63]
+  }
+}
+RetailcrmApi::Request.customers_corporate.notes.retrieve(params: params).body
+#=> {:success=>true, :pagination=>{:limit=>20, :totalCount=>0, :currentPage=>1, :totalPageCount=>0}, :notes=>[]}
+```
 ### <a name="post--api-v5-customers-corporate-notes-create"></a> [Создание заметки](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-corporate-notes-create)
+```ruby
+body = {
+  site: "deppa-ru",
+  note: {
+    text: "Very bad",
+    customer: {
+      id: 63
+    }
+  }
+}
+RetailcrmApi::Request.customers_corporate.notes.create(body: body).body
+#=> {:success=>true, :id=>45} 
+```
 ### <a name="post--api-v5-customers-corporate-notes-id-delete"></a> [Удаление заметки](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-corporate-notes-id-delete)
+```ruby
+RetailcrmApi::Request.customers_corporate.notes(45).delete.body
+#=> {:success=>true}
+```
 ### <a name="post--api-v5-customers-corporate-upload"></a> [Пакетная загрузка корпоративных клиентов](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-corporate-upload)
+```ruby
+body = {
+  customersCorporate: [
+    {
+      externalId: 44,
+      bad: true,
+      nickName: "ryzhikov"
+    },
+    {
+      externalId: 22,
+      bad: true,
+      nickName: "buytaert"
+    }
+  ]
+}
+RetailcrmApi::Request.customers_corporate.create(body: body, suffix: "upload").body
+#=> {:success=>true, :uploadedCustomers=>[{:id=>63, :externalId=>"44"}, {:id=>64, :externalId=>"22"}]}
+```
 ### <a name="get--api-v5-customers-corporate-externalId"></a> [Получение информации о корпоративном клиенте](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-customers-corporate-externalId)
+```ruby
+params = {
+  by: "externalId"
+}
+RetailcrmApi::Request.customers_corporate(12).retrieve(params: params).body
+#=> {:success=>true, :customerCorporate=>{:type=>"customer_corporate", :id=>63, :externalId=>"12", :nickName=>"ryzhikov", :createdAt=>"2021-08-04 19:58:50", :vip=>false, :bad=>true, :site=>"deppa-ru", :tags=>[], :marginSumm=>0, :totalSumm=>0, :averageSumm=>0, :ordersCount=>0, :customFields=>[], :personalDiscount=>0}} 
+```
 ### <a name="get--api-v5-customers-corporate-externalId-addresses"></a> [Список адресов корпоративного клиента](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-customers-corporate-externalId-addresses)
+```ruby
+params = {
+  by: "id"
+}
+RetailcrmApi::Request.customers_corporate(63).addresses.retrieve(params: params).body
+#=> {:success=>true, :addresses=>[], :pagination=>{:limit=>20, :totalCount=>0, :currentPage=>1, :totalPageCount=>0}}
+```
 ### <a name="post--api-v5-customers-corporate-externalId-addresses-create"></a> [Создание адреса для корпоративного клиента](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-corporate-externalId-addresses-create)
+```ruby
+params = {
+  by: "id"
+}
+body = {
+  site: "deppa-ru",
+  address: {
+    city: "Санкт-Петербург"
+  }
+}
+RetailcrmApi::Request.customers_corporate(63).addresses.create(params: params, body: body).body
+#=> {:success=>true, :id=>42} 
+```
 ### <a name="post--api-v5-customers-corporate-externalId-addresses-entityExternalId-edit"></a> [Редактирование адреса корпоративного клиента](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-corporate-externalId-addresses-entityExternalId-edit)
+```ruby
+params = {
+  by: "id",
+  entityBy: "id"
+}
+body = {
+  site: "deppa-ru",
+  address: {
+    city: "Вятка"
+  }
+}
+RetailcrmApi::Request.customers_corporate(63).addresses(42).update(params: params, body: body).body
+#=> {:success=>true, :id=>42}
+```
 ### <a name="get--api-v5-customers-corporate-externalId-companies"></a> [Список компаний корпоративного клиента](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-customers-corporate-externalId-companies)
+```ruby
+params = {
+  by: "id"
+}
+RetailcrmApi::Request.customers_corporate(63).companies.retrieve(params: params).body
+#=> {:success=>true, :companies=>[], :pagination=>{:limit=>20, :totalCount=>0, :currentPage=>1, :totalPageCount=>0}}
+```
 ### <a name="post--api-v5-customers-corporate-externalId-companies-create"></a> [Создание компании для корпоративного клиента](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-corporate-externalId-companies-create)
+```ruby
+params = {
+  by: "id"
+}
+body = {
+  site: "deppa-ru",
+  company: {
+    name: "DEPPA",
+    site: "https://deppa.ru"
+  }
+}
+RetailcrmApi::Request.customers_corporate(62).companies.create(params: params, body: body).body
+#=> {:success=>true, :id=>16}
+```
 ### <a name="post--api-v5-customers-corporate-externalId-companies-entityExternalId-edit"></a> [Редактирование компании корпоративного клиента](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-corporate-externalId-companies-entityExternalId-edit)
+```ruby
+params = {
+  by: "id",
+  entityBy: "id"
+}
+body = {
+  site: "deppa-ru",
+  company: {
+    isMain: true
+  }
+}
+RetailcrmApi::Request.customers_corporate(62).companies(16).update(params: params, body: body).body
+#=> {:success=>true, :id=>16}
+```
 ### <a name="get--api-v5-customers-corporate-externalId-contacts"></a> [Список контактных лиц корпоративного клиента](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-customers-corporate-externalId-contacts)
+```ruby
+params = {
+  by: "id"
+}
+RetailcrmApi::Request.customers_corporate(62).contacts.retrieve(params: params).body
+#=> {:success=>true, :contacts=>[], :pagination=>{:limit=>20, :totalCount=>0, :currentPage=>1, :totalPageCount=>0}}
+```
 ### <a name="post--api-v5-customers-corporate-externalId-contacts-create"></a> [Создание связи корпоративного клиента с контактным лицом](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-corporate-externalId-contacts-create)
+```ruby
+params = {
+  by: "id"
+}
+body = {
+  site: "deppa-ru",
+  contact: {
+    isMain: true,
+    customer: {
+      externalId: "555"
+    }
+  }
+}
+RetailcrmApi::Request.customers_corporate(62).contacts.create(params: params, body: body).body
+#=> {:success=>true, :id=>16}
+```
 ### <a name="post--api-v5-customers-corporate-externalId-contacts-entityExternalId-edit"></a> [Редактирование связи корпоративного клиента с контактным лицом](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-corporate-externalId-contacts-entityExternalId-edit)
+```ruby
+params = {
+  by: "id",
+  entityBy: "externalId"
+}
+body = {
+  site: "deppa-ru",
+  contact: {
+    isMain: false
+  }
+}
+RetailcrmApi::Request.customers_corporate(62).contacts("555").update(params: params, body: body).body
+#=> {:success=>true, :id=>16}
+```
 ### <a name="post--api-v5-customers-corporate-externalId-edit"></a> [Редактирование корпоративного клиента](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-corporate-externalId-edit)
+```ruby
+params = {
+  by: "id"
+}
+body = {
+  site: "deppa-ru",
+  customerCorporate: {
+    personalDiscount: 99.9
+  }
+}
+RetailcrmApi::Request.customers_corporate(62).update(params: params, body: body).body
+#=> {:success=>true, :id=>62}
+```
 ## <a name="delivery"></a> Доставки
 ### <a name="post--api-v5-delivery-calculate"></a> [Расчёт стоимости доставки](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-delivery-calculate)
 ### <a name="post--api-v5-delivery-generic-subcode-tracking"></a> [Обновление статусов доставки](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-delivery-generic-subcode-tracking)
