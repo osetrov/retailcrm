@@ -288,8 +288,8 @@ body = {
   cost: {
     summ: 100,
     costItem: "office-expenses",
-    dateFrom: (DateTime.now - 1.day).strftime("%Y-%m-%d"),
-    dateTo: DateTime.now.strftime("%Y-%m-%d")
+    dateFrom: (DateTime.now - 1.day).strftime("%Y-%m-%d %H:%M:%S"),
+    dateTo: DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
   }
 }
 RetailcrmApi::Request.costs.create(body: body).body
@@ -311,8 +311,8 @@ body = {
       sites: ["deppa-ru"],
       summ: 100,
       costItem: "office-expenses",
-      dateFrom: (DateTime.now - 1.day).strftime("%Y-%m-%d"),
-      dateTo: DateTime.now.strftime("%Y-%m-%d")
+      dateFrom: (DateTime.now - 1.day).strftime("%Y-%m-%d %H:%M:%S"),
+      dateTo: DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
     }
   ]
 }
@@ -331,8 +331,8 @@ body = {
   cost: {
     summ: 200,
     costItem: "office-expenses",
-    dateFrom: (DateTime.now - 1.day).strftime("%Y-%m-%d"),
-    dateTo: DateTime.now.strftime("%Y-%m-%d")
+    dateFrom: (DateTime.now - 1.day).strftime("%Y-%m-%d %H:%M:%S"),
+    dateTo: DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
   }
 }
 RetailcrmApi::Request.costs(298).update(body: body).body
@@ -824,6 +824,19 @@ RetailcrmApi::Request.customers_corporate(62).update(params: params, body: body)
 ```
 ## <a name="delivery"></a> Доставки
 ### <a name="post--api-v5-delivery-calculate"></a> [Расчёт стоимости доставки](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-delivery-calculate)
+```ruby
+body = {
+  deliveryTypeCodes: ["courier", "self-delivery", "russian-post", ""],
+  order: {
+    weight: 1,
+    length: 10,
+    width: 10,
+    height: 10
+  }
+}
+RetailcrmApi::Request.delivery.create(body: body, suffix: "calculate").body
+#=> {:success=>true, :calculations=>[{:code=>"courier", :available=>true, :cost=>300}, {:code=>"self-delivery", :available=>true, :cost=>0}, {:code=>"russian-post", :available=>true, :cost=>0}, {:code=>"ems", :available=>true, :cost=>0}]} 
+```
 ### <a name="post--api-v5-delivery-generic-subcode-tracking"></a> [Обновление статусов доставки](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-delivery-generic-subcode-tracking)
 ### <a name="get--api-v5-delivery-shipments"></a> [Получение списка отгрузок в службы доставки](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-delivery-shipments)
 ### <a name="post--api-v5-delivery-shipments-create"></a> [Создание отгрузки](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-delivery-shipments-create)
@@ -863,8 +876,57 @@ RetailcrmApi::Request.customers_corporate(62).update(params: params, body: body)
 ### <a name="get--api-v5-loyalty-loyalties-id"></a> [Получение информации о программе лояльности](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-loyalty-loyalties-id)
 ## <a name="orders"></a> Заказы
 ### <a name="get--api-v5-orders"></a> [Получение списка заказов, удовлетворяющих заданному фильтру](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-orders)
+```ruby
+params = {
+  limit: 100,
+  filter: {
+    countries: ["BY","KZ","RU","UA"]
+  }
+}
+RetailcrmApi::Request.orders.retrieve(params: params).body
+#=> {:success=>true, :pagination=>{:limit=>100, :totalCount=>0, :currentPage=>1, :totalPageCount=>0}, :orders=>[]} 
+```
 ### <a name="post--api-v5-orders-combine"></a> [Объединение заказов](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-orders-combine)
 ### <a name="post--api-v5-orders-create"></a> [Создание заказа](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-orders-create)
+```ruby
+body = {
+  site: "deppa-ru",
+  order: {
+    :externalId => 171,
+    :number => '171',
+    :email => 'test@example.com',
+    :createdAt => '2014-10-28 19:31:10',
+    :discountPercent => 10,
+    :firstName => 'Юкихиро',
+    :lastName => 'Мацумото',
+    :customer => {
+      :externalId => 999,
+      :firstName => "Юкихиро",
+      :lastName => 'Мацумото',
+      :phones => [{ :number => '+79000000000' }],
+    },
+    :delivery => {
+      :code => 'courier',
+      :cost => 500,
+      :address => {:text => 'г. Санкт-Петербург, ул. Профессора Попова, д.376'}
+    },
+    :items => [
+          {
+            :productId => 170,
+            :initialPrice => 500,
+            :quantity => 2
+          },
+          {
+            :productId => 175,
+            :initialPrice => 1300,
+            :quantity => 1
+          }
+        ]
+  }
+}
+RetailcrmApi::Request.orders.create(body: body).body
+#=> {:success=>true, :id=>41, :order=>{:slug=>41, :bonusesCreditTotal=>0, :bonusesChargeTotal=>0, :id=>41, :number=>"171", :externalId=>"171", :orderType=>"eshop-individual", :orderMethod=>"shopping-cart", :privilegeType=>"none", :createdAt=>"2014-10-28 19:31:10", :statusUpdatedAt=>"2021-08-05 08:22:04", :summ=>2300, :totalSumm=>2800, :prepaySum=>0, :purchaseSumm=>0, :markDatetime=>"2021-08-05 08:22:04", :lastName=>"Мацумото", :firstName=>"Юкихиро", :email=>"test@example.com", :call=>false, :expired=>false, :customer=>{:type=>"customer", :id=>60, :externalId=>"999", :isContact=>false, :createdAt=>"2021-08-04 13:41:05", :vip=>true, :bad=>false, :site=>"deppa-ru", :contragent=>{:contragentType=>"individual"}, :tags=>[], :marginSumm=>0, :totalSumm=>0, :averageSumm=>0, :ordersCount=>0, :costSumm=>0, :customFields=>[], :personalDiscount=>0, :address=>{:id=>43, :text=>"г. Санкт-Петербург, ул. Профессора Попова, д.376"}, :segments=>[{:id=>20, :code=>"nizkiy-sredniy-chek", :name=>"Низкий средний чек", :createdAt=>"2021-07-29 00:34:14", :isDynamic=>true, :customersCount=>4, :active=>true}, {:id=>31, :code=>"pol-ne-ukazan", :name=>"Пол не указан", :createdAt=>"2021-07-29 00:34:15", :isDynamic=>true, :customersCount=>4, :active=>true}, {:id=>26, :code=>"bez-otmen", :name=>"Без отмен", :createdAt=>"2021-07-29 00:34:15", :isDynamic=>true, :customersCount=>4, :active=>true}], :firstName=>"Юкихиро", :lastName=>"Мацумото", :presumableSex=>"female", :email=>"test@example.com", :phones=>[]}, :contact=>{:type=>"customer", :id=>60, :externalId=>"999", :isContact=>false, :createdAt=>"2021-08-04 13:41:05", :vip=>true, :bad=>false, :site=>"deppa-ru", :contragent=>{:contragentType=>"individual"}, :tags=>[], :marginSumm=>0, :totalSumm=>0, :averageSumm=>0, :ordersCount=>0, :costSumm=>0, :customFields=>[], :personalDiscount=>0, :address=>{:id=>43, :text=>"г. Санкт-Петербург, ул. Профессора Попова, д.376"}, :segments=>[{:id=>20, :code=>"nizkiy-sredniy-chek", :name=>"Низкий средний чек", :createdAt=>"2021-07-29 00:34:14", :isDynamic=>true, :customersCount=>4, :active=>true}, {:id=>31, :code=>"pol-ne-ukazan", :name=>"Пол не указан", :createdAt=>"2021-07-29 00:34:15", :isDynamic=>true, :customersCount=>4, :active=>true}, {:id=>26, :code=>"bez-otmen", :name=>"Без отмен", :createdAt=>"2021-07-29 00:34:15", :isDynamic=>true, :customersCount=>4, :active=>true}], :firstName=>"Юкихиро", :lastName=>"Мацумото", :presumableSex=>"female", :email=>"test@example.com", :phones=>[]}, :contragent=>{:contragentType=>"individual"}, :delivery=>{:code=>"courier", :cost=>500, :netCost=>0, :address=>{:text=>"г. Санкт-Петербург, ул. Профессора Попова, д.376"}}, :site=>"deppa-ru", :status=>"new", :items=>[{:bonusesChargeTotal=>0, :bonusesCreditTotal=>0, :markingCodes=>[], :discounts=>[], :id=>109, :initialPrice=>500, :discountTotal=>0, :prices=>[{:price=>500, :quantity=>2}], :createdAt=>"2014-10-28 19:31:10", :quantity=>2, :status=>"new", :offer=>{:displayName=>"noname", :id=>76, :xmlId=>"4f9c8bc6-7e40-47ee-a90b-c8936ffbf7fb", :name=>"noname", :unit=>{:code=>"pc", :name=>"Штука", :sym=>"шт."}}, :properties=>[], :purchasePrice=>0}, {:bonusesChargeTotal=>0, :bonusesCreditTotal=>0, :markingCodes=>[], :discounts=>[], :id=>110, :initialPrice=>1300, :discountTotal=>0, :prices=>[{:price=>1300, :quantity=>1}], :createdAt=>"2014-10-28 19:31:10", :quantity=>1, :status=>"new", :offer=>{:displayName=>"noname", :id=>77, :xmlId=>"d9b45af3-2f24-49f5-b2b9-e7f5c7362ca9", :name=>"noname", :unit=>{:code=>"pc", :name=>"Штука", :sym=>"шт."}}, :properties=>[], :purchasePrice=>0}], :payments=>[], :fromApi=>true, :shipped=>false, :customFields=>[]}}
+```
 ### <a name="post--api-v5-orders-fix-external-ids"></a> [Массовая запись внешних ID заказов](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-orders-fix-external-ids)
 ### <a name="get--api-v5-orders-history"></a> [Получение истории изменений заказов](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-orders-history)
 ### <a name="post--api-v5-orders-links-create"></a> [Создание связи между заказами](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-orders-links-create)
@@ -967,3 +1029,7 @@ RetailcrmApi::Request.customers_corporate(62).update(params: params, body: body)
 ### <a name="get--api-v5-verification-sms-checkId-status"></a> [Проверка статуса верификации](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-verification-sms-checkId-status)
 ## <a name="get--api-v5-statistic"></a> Статистика
 ### <a name="get--api-v5-statistic-update"></a> [Обновление статистики](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-statistic-update)
+```ruby
+RetailcrmApi::Request.statistic("update").retrieve.body
+#=> {:success=>true}
+```

@@ -111,7 +111,7 @@ module RetailcrmApi
         request.headers['User-Agent'] = "RetailCrmApi/#{RetailcrmApi::VERSION} Ruby gem"
         request.headers.merge!(headers) if headers
         if body
-          body.each { |k, v| body[k] = MultiJson.dump(v) }
+          body.each { |k, v| body[k] = MultiJson.dump(v) if [Array, Hash].include?(v.class) }
           request.body = URI.encode_www_form(body)
         end
         request.options.timeout = self.timeout
