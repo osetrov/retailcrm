@@ -463,6 +463,8 @@ RetailcrmApi::Request.customers.create(body: body, suffix: "combine").body
 #=> {:success=>true}
 ```
 ### <a name="post--api-v5-customers-create"></a> [Создание клиента](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-customers-create)
+**Если включена функциональность корпоративных клиентов, то customer[contragent][contragentType] исключительно individual**
+
 ```ruby
 body = {
   site: "deppa-ru",
@@ -893,22 +895,22 @@ body = {
   site: "deppa-ru",
   order: {
     :externalId => 171,
-    :number => '171',
-    :email => 'test@example.com',
-    :createdAt => '2014-10-28 19:31:10',
+    :number => "171",
+    :email => "test@example.com",
+    :createdAt => DateTime.now.strftime("%Y-%m-%d %H:%M:%S"),
     :discountPercent => 10,
-    :firstName => 'Юкихиро',
-    :lastName => 'Мацумото',
+    :firstName => "Юкихиро",
+    :lastName => "Мацумото",
     :customer => {
       :externalId => 999,
       :firstName => "Юкихиро",
-      :lastName => 'Мацумото',
-      :phones => [{ :number => '+79000000000' }],
+      :lastName => "Мацумото",
+      :phones => [{ :number => "+79000000000" }],
     },
     :delivery => {
-      :code => 'courier',
+      :code => "courier",
       :cost => 500,
-      :address => {:text => 'г. Санкт-Петербург, ул. Профессора Попова, д.376'}
+      :address => {:text => "г. Санкт-Петербург, ул. Профессора Попова, д.376"}
     },
     :items => [
           {
@@ -1003,6 +1005,15 @@ RetailcrmApi::Request.orders.create(body: body).body
 ### <a name="post--api-v5-store-prices-upload"></a>  [Обновление цен торговых предложений](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-store-prices-upload)
 ### <a name="get--api-v5-store-product-groups"></a> [Получение списка групп товаров, удовлетворяющих заданному фильтру](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-store-product-groups)
 ### <a name="get--api-v5-store-products"></a> [Получение списка товаров с торговыми предложениями, удовлетворяющих заданному фильтру](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-store-products)
+```ruby
+params = {
+  filter: {
+    active: 1
+  }
+}
+RetailcrmApi::Request.store.products.retrieve(params: params).body
+#=> {:success=>true, :pagination=>{:limit=>20, :totalCount=>1, :currentPage=>1, :totalPageCount=>1}, :products=>[{:minPrice=>100, :maxPrice=>100, :id=>63, :article=>"test article", :name=>"test name", :url=>"https://deppa.ru/products/test", :imageUrl=>"https://s3-s1.retailcrm.tech/eu-central-1/retailcrm/deppa-3870e9becb1f4449232b394505b0c283/product/610e37b7b8a4b-lqe8zj9nmbk21.png", :popular=>true, :novelty=>true, :groups=>[], :manufacturer=>"Deppa", :offers=>[{:name=>"test", :price=>100, :images=>["https://s3-s1.retailcrm.tech/eu-central-1/retailcrm/deppa-3870e9becb1f4449232b394505b0c283/product/610e37b7b8a4b-lqe8zj9nmbk21.png"], :id=>78, :externalId=>"1", :article=>"test a", :prices=>[{:priceType=>"base", :price=>100, :ordering=>991}], :quantity=>0, :weight=>1, :length=>1, :width=>1, :height=>1, :active=>true, :unit=>{:code=>"pc", :name=>"Штука", :sym=>"шт."}, :barcode=>"11111"}], :updatedAt=>"2021-08-07 10:35:26", :active=>true, :quantity=>0, :markable=>false}]}
+```
 ### <a name="get--api-v5-store-products-properties"></a> [Получение списка свойств товаров, удовлетворяющих заданному фильтру](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-store-products-properties)
 ### <a name="callback_post--integrationModule_integrations__store__actions__inventoriesUpload_"></a> [Обновление остатков и закупочных цен](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#callback_post--integrationModule_integrations__store__actions__inventoriesUpload_)
 ### <a name="callback_post--integrationModule_integrations__store__actions__reserve_"></a> [Актуализация остатков после обращения к складской системе](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#callback_post--integrationModule_integrations__store__actions__reserve_)
