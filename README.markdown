@@ -938,6 +938,13 @@ RetailcrmApi::Request.orders.create(body: body).body
 ### <a name="post--api-v5-orders-payments-id-delete"></a> [Удаление платежа](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-orders-payments-id-delete)
 ### <a name="post--api-v5-orders-payments-id-edit"></a> [Редактирование платежа](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-orders-payments-id-edit)
 ### <a name="get--api-v5-orders-statuses"></a> [Получение списка статусов заказов](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-orders-statuses)
+```ruby
+params = {
+  externalIds: [171]
+}
+RetailcrmApi::Request.orders.statuses.retrieve(params: params).body
+#=> {:success=>true, :orders=>[{:id=>41, :externalId=>"171", :status=>"delivering", :group=>"delivery"}]}
+```
 ### <a name="post--api-v5-orders-upload"></a> [Пакетная загрузка заказов](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-orders-upload)
 ### <a name="get--api-v5-orders-externalId"></a> [Получение информации о заказе](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-orders-externalId)
 ### <a name="post--api-v5-orders-externalId-edit"></a> [Редактирование заказа](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-orders-externalId-edit)
@@ -970,7 +977,23 @@ RetailcrmApi::Request.orders.create(body: body).body
 ### <a name="get--api-v5-reference-delivery-services"></a> [Получение списка служб доставки](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-reference-delivery-services)
 ### <a name="post--api-v5-reference-delivery-services-code-edit"></a> [Создание/редактирование службы доставки](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-reference-delivery-services-code-edit)
 ### <a name="get--api-v5-reference-delivery-types"></a> [Получение списка типов доставки](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-reference-delivery-types)
+```ruby
+RetailcrmApi::Request.reference.delivery_types.retrieve.body
+#=> {:success=>true, :deliveryTypes=>{:courier=>{:isDynamicCostCalculation=>false, :isAutoCostCalculation=>false, :isAutoNetCostCalculation=>false, :isCostDependsOnRegionAndWeightAndSum=>false, :isCostDependsOnDateTime=>false, :name=>"Доставка курьером", :code=>"courier", :active=>true, :defaultCost=>300, :defaultNetCost=>0, :paymentTypes=>["cash", "bank-card", "bank-transfer", "e-money", "credit"], :deliveryServices=>[], :defaultForCrm=>false}, :"self-delivery"=>{:isDynamicCostCalculation=>false, :isAutoCostCalculation=>false, :isAutoNetCostCalculation=>false, :isCostDependsOnRegionAndWeightAndSum=>false, :isCostDependsOnDateTime=>false, :name=>"Самовывоз", :code=>"self-delivery", :active=>true, :defaultCost=>0, :defaultNetCost=>0, :paymentTypes=>["cash", "bank-card", "bank-transfer", "e-money", "credit"], :deliveryServices=>[], :defaultForCrm=>false}, :"russian-post"=>{:isDynamicCostCalculation=>false, :isAutoCostCalculation=>false, :isAutoNetCostCalculation=>false, :isCostDependsOnRegionAndWeightAndSum=>false, :isCostDependsOnDateTime=>false, :name=>"Почта России", :code=>"russian-post", :active=>true, :defaultCost=>0, :defaultNetCost=>0, :paymentTypes=>["bank-card", "bank-transfer", "e-money", "credit"], :deliveryServices=>[], :defaultForCrm=>false}, :ems=>{:isDynamicCostCalculation=>false, :isAutoCostCalculation=>false, :isAutoNetCostCalculation=>false, :isCostDependsOnRegionAndWeightAndSum=>false, :isCostDependsOnDateTime=>false, :name=>"EMS Почта России", :code=>"ems", :active=>true, :defaultCost=>0, :defaultNetCost=>0, :paymentTypes=>["bank-card", "bank-transfer", "e-money", "credit"], :deliveryServices=>[], :defaultForCrm=>false}}}
+```
 ### <a name="post--api-v5-reference-delivery-types-code-edit"></a> [Создание/редактирование типа доставки](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-reference-delivery-types-code-edit)
+```ruby
+body = {
+  deliveryType: {
+    name: "Ozon.Logistics",
+    code: "ozon",
+    defaultCost: 125.0,
+    active: true
+  }
+}
+RetailcrmApi::Request.reference.delivery_types("ozon").update(body: body).body
+#=> {:success=>true, :id=>5}
+```
 ### <a name="get--api-v5-reference-legal-entities"></a> [Получение списка юридических лиц](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-reference-legal-entities)
 ### <a name="post--api-v5-reference-legal-entities-code-edit"></a> [Создание/редактирование юридического лица](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-reference-legal-entities-code-edit)
 ### <a name="get--api-v5-reference-mg-channels"></a> [Получение списка MessageGateway каналов](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-reference-mg-channels)
@@ -979,18 +1002,61 @@ RetailcrmApi::Request.orders.create(body: body).body
 ### <a name="get--api-v5-reference-order-types"></a> [Получение списка типов заказов](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-reference-order-types)
 ### <a name="post--api-v5-reference-order-types-code-edit"></a> [Создание/редактирование типа заказа](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-reference-order-types-code-edit)
 ### <a name="get--api-v5-reference-payment-statuses"></a> [Получение списка статусов оплаты](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-reference-payment-statuses)
+```ruby
+RetailcrmApi::Request.reference.payment_statuses.retrieve.body
+# => {:success=>true, :paymentStatuses=>{:"not-paid"=>{:name=>"Не оплачен", :code=>"not-paid", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :paymentComplete=>false, :ordering=>10, :paymentTypes=>["bank-card", "bank-transfer", "credit", "cash", "e-money"]}, :invoice=>{:name=>"Выставлен счет", :code=>"invoice", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :paymentComplete=>false, :ordering=>20, :paymentTypes=>["bank-card", "bank-transfer", "credit", "cash", "e-money"]}, :"wait-approved"=>{:name=>"Ожидает подтверждения", :code=>"wait-approved", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :paymentComplete=>false, :ordering=>25, :paymentTypes=>["bank-card", "bank-transfer", "credit", "cash", "e-money"]}, :"payment-start"=>{:name=>"Платеж проведен", :code=>"payment-start", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :paymentComplete=>false, :ordering=>30, :paymentTypes=>["bank-card", "bank-transfer", "credit", "cash", "e-money"]}, :canceled=>{:name=>"Отменен", :code=>"canceled", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :paymentComplete=>false, :ordering=>30, :paymentTypes=>["bank-card", "bank-transfer", "credit", "cash", "e-money"]}, :"credit-check"=>{:name=>"Проверка документов на кредит", :code=>"credit-check", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :paymentComplete=>false, :ordering=>40, :paymentTypes=>["credit"]}, :"credit-approved"=>{:name=>"Кредит одобрен", :code=>"credit-approved", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :paymentComplete=>false, :ordering=>50, :paymentTypes=>["credit"]}, :fail=>{:name=>"Ошибка", :code=>"fail", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :paymentComplete=>false, :ordering=>55, :paymentTypes=>["bank-card", "bank-transfer", "credit", "cash", "e-money"]}, :paid=>{:name=>"Оплачен", :code=>"paid", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :paymentComplete=>true, :ordering=>60, :paymentTypes=>["bank-card", "bank-transfer", "credit", "cash", "e-money"]}, :returned=>{:name=>"Возвращен", :code=>"returned", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :paymentComplete=>false, :ordering=>70, :paymentTypes=>["bank-card", "bank-transfer", "credit", "cash", "e-money"]}}}
+```
 ### <a name="post--api-v5-reference-payment-statuses-code-edit"></a> [Создание/редактирование статусов оплаты](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-reference-payment-statuses-code-edit)
 ### <a name="get--api-v5-reference-payment-types"></a> [Получение списка типов оплаты](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-reference-payment-types)
+```ruby
+RetailcrmApi::Request.reference.payment_types.retrieve.body
+#=> {:success=>true, :paymentTypes=>{:cash=>{:name=>"Наличные", :code=>"cash", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>["courier", "self-delivery"], :paymentStatuses=>["not-paid", "invoice", "wait-approved", "payment-start", "canceled", "fail", "paid", "returned"]}, :"bank-card"=>{:name=>"Банковская карта", :code=>"bank-card", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>["courier", "self-delivery", "russian-post", "ems"], :paymentStatuses=>["not-paid", "invoice", "wait-approved", "payment-start", "canceled", "fail", "paid", "returned"]}, :"e-money"=>{:name=>"Электронные деньги", :code=>"e-money", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>["courier", "self-delivery", "russian-post", "ems"], :paymentStatuses=>["not-paid", "invoice", "wait-approved", "payment-start", "canceled", "fail", "paid", "returned"]}, :"bank-transfer"=>{:name=>"Банковский перевод", :code=>"bank-transfer", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>["courier", "self-delivery", "russian-post", "ems"], :paymentStatuses=>["not-paid", "invoice", "wait-approved", "payment-start", "canceled", "fail", "paid", "returned"]}, :credit=>{:name=>"Кредит", :code=>"credit", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>["courier", "self-delivery", "russian-post", "ems"], :paymentStatuses=>["not-paid", "invoice", "wait-approved", "payment-start", "canceled", "credit-check", "credit-approved", "fail", "paid", "returned"]}, :"apple-pay"=>{:name=>"Apple pay", :code=>"apple-pay", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}, :empty=>{:name=>"При получении", :code=>"empty", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}, :"yandex-kassa-sberbank"=>{:name=>"Сбербанк Онлайн", :code=>"yandex-kassa-sberbank", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}, :"yandex-kassa-alfabank"=>{:name=>"Альфа-Клик", :code=>"yandex-kassa-alfabank", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}, :"yandex-kassa-qiwi"=>{:name=>"QIWI Кошелек", :code=>"yandex-kassa-qiwi", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}, :"yandex-kassa-webmoney"=>{:name=>"Webmoney", :code=>"yandex-kassa-webmoney", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}, :"yandex-kassa-b2b-sberbank"=>{:name=>"Сбербанк Бизнес Онлайн", :code=>"yandex-kassa-b2b-sberbank", :active=>false, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}, :"empty-1"=>{:name=>"PayPal", :code=>"empty-1", :active=>false, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}, :"yandex-kassa-apple-pay"=>{:name=>"Apple Pay", :code=>"yandex-kassa-apple-pay", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}, :"yandex-kassa-cash"=>{:name=>"Наличные", :code=>"yandex-kassa-cash", :active=>false, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}, :"yandex-kassa-installments"=>{:name=>"Заплатить по частям", :code=>"yandex-kassa-installments", :active=>false, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}, :"yandex-kassa-mobile-balance"=>{:name=>"Баланс телефона\n", :code=>"yandex-kassa-mobile-balance", :active=>false, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}, :"yandex-kassa-wechat"=>{:name=>"WeChat", :code=>"yandex-kassa-wechat", :active=>false, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}, :invoice=>{:name=>"Счет для юр. лиц", :code=>"invoice", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}, :paykeeper=>{:name=>"Картой на сайте", :code=>"paykeeper", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}, :"yandex-kassa-google-pay"=>{:name=>"Google Pay", :code=>"yandex-kassa-google-pay", :active=>false, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}, :"yandex-kassa-yandex-money"=>{:name=>"ЮMoney", :code=>"yandex-kassa-yandex-money", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}, :"yandex-kassa-tinkoff-bank"=>{:name=>"Тинькофф", :code=>"yandex-kassa-tinkoff-bank", :active=>true, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}, :"yandex-kassa-bank-card"=>{:name=>"Картой на сайте Yandex", :code=>"yandex-kassa-bank-card", :active=>false, :defaultForCrm=>false, :defaultForApi=>false, :deliveryTypes=>[], :paymentStatuses=>[]}}}
+```
 ### <a name="post--api-v5-reference-payment-types-code-edit"></a> [Создание/редактирование типа оплаты](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-reference-payment-types-code-edit)
+```ruby
+body = {
+  paymentType: {
+    name: "Apple pay",
+    code: "apple_pay",
+    active: true
+  }
+}
+RetailcrmApi::Request.reference.payment_types("apple_pay").update(body: body).body
+#=> {:success=>true, :id=>6}
+```
 ### <a name="get--api-v5-reference-price-types"></a> [Получение списка типов цен](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-reference-price-types)
+```ruby
+RetailcrmApi::Request.reference.price_types.retrieve.body
+#=> {:success=>true, :priceTypes=>[{:id=>1, :code=>"base", :name=>"Базовая", :active=>true, :default=>true, :geo=>[], :groups=>[], :ordering=>991}]}
+```
 ### <a name="post--api-v5-reference-price-types-code-edit"></a> [Создание/редактирование типа цены](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-reference-price-types-code-edit)
 ### <a name="get--api-v5-reference-product-statuses"></a> [Получение списка статусов товаров в заказе](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-reference-product-statuses)
 ### <a name="post--api-v5-reference-product-statuses-code-edit"></a> [Создание/редактирование статуса товара в заказе](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-reference-product-statuses-code-edit)
 ### <a name="get--api-v5-reference-sites"></a> [Получение списка магазинов](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-reference-sites)
 ### <a name="post--api-v5-reference-sites-code-edit"></a> [Создание/редактирование магазина](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-reference-sites-code-edit)
 ### <a name="get--api-v5-reference-status-groups"></a> [Получение списка групп статусов заказа](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-reference-status-groups)
+```ruby
+RetailcrmApi::Request.reference.status_groups.retrieve.body
+#=> {:success=>true, :statusGroups=>{:new=>{:name=>"Новый", :code=>"new", :active=>true, :ordering=>10, :process=>false, :statuses=>["new"]}, :approval=>{:name=>"Согласование", :code=>"approval", :active=>true, :ordering=>20, :process=>true, :statuses=>["availability-confirmed", "offer-analog", "client-confirmed", "prepayed"]}, :assembling=>{:name=>"Комплектация", :code=>"assembling", :active=>true, :ordering=>30, :process=>true, :statuses=>["send-to-assembling", "assembling", "assembling-complete"]}, :delivery=>{:name=>"Доставка", :code=>"delivery", :active=>true, :ordering=>40, :process=>true, :statuses=>["send-to-delivery", "delivering", "redirect"]}, :complete=>{:name=>"Выполнен", :code=>"complete", :active=>true, :ordering=>50, :process=>false, :statuses=>["complete", "pickpoint"]}, :cancel=>{:name=>"Отменен", :code=>"cancel", :active=>true, :ordering=>60, :process=>false, :statuses=>["no-call", "no-product", "already-buyed", "delyvery-did-not-suit", "prices-did-not-suit", "cancel-other"]}}}
+```
 ### <a name="get--api-v5-reference-statuses"></a> [Получение списка статусов заказа](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-reference-statuses)
+```ruby
+RetailcrmApi::Request.reference.statuses.retrieve.body
+#=> {:success=>true, :statuses=>{:new=>{:name=>"Новый", :code=>"new", :active=>true, :ordering=>10, :group=>"new"}, :complete=>{:name=>"Выполнен", :code=>"complete", :active=>true, :ordering=>10, :group=>"complete"}, :"availability-confirmed"=>{:name=>"Наличие подтверждено", :code=>"availability-confirmed", :active=>true, :ordering=>10, :group=>"approval"}, :"offer-analog"=>{:name=>"Предложить замену", :code=>"offer-analog", :active=>true, :ordering=>20, :group=>"approval"}, :"client-confirmed"=>{:name=>"Согласовано с клиентом", :code=>"client-confirmed", :active=>true, :ordering=>30, :group=>"approval"}, :prepayed=>{:name=>"Предоплата поступила", :code=>"prepayed", :active=>true, :ordering=>40, :group=>"approval"}, :"send-to-assembling"=>{:name=>"Передано в комплектацию", :code=>"send-to-assembling", :active=>true, :ordering=>10, :group=>"assembling"}, :assembling=>{:name=>"Комплектуется", :code=>"assembling", :active=>true, :ordering=>20, :group=>"assembling"}, :"assembling-complete"=>{:name=>"Укомплектован", :code=>"assembling-complete", :active=>true, :ordering=>30, :group=>"assembling"}, :"send-to-delivery"=>{:name=>"Передан в доставку", :code=>"send-to-delivery", :active=>true, :ordering=>10, :group=>"delivery"}, :delivering=>{:name=>"Доставляется", :code=>"delivering", :active=>true, :ordering=>20, :group=>"delivery"}, :redirect=>{:name=>"Доставка перенесена", :code=>"redirect", :active=>true, :ordering=>30, :group=>"delivery"}, :"no-call"=>{:name=>"Недозвон", :code=>"no-call", :active=>true, :ordering=>10, :group=>"cancel"}, :"no-product"=>{:name=>"Нет в наличии", :code=>"no-product", :active=>true, :ordering=>20, :group=>"cancel"}, :"already-buyed"=>{:name=>"Купил в другом месте", :code=>"already-buyed", :active=>true, :ordering=>30, :group=>"cancel"}, :"delyvery-did-not-suit"=>{:name=>"Не устроила доставка", :code=>"delyvery-did-not-suit", :active=>true, :ordering=>40, :group=>"cancel"}, :"prices-did-not-suit"=>{:name=>"Не устроила цена", :code=>"prices-did-not-suit", :active=>true, :ordering=>50, :group=>"cancel"}, :"cancel-other"=>{:name=>"Отменен", :code=>"cancel-other", :active=>true, :ordering=>60, :group=>"cancel"}}}
+```
 ### <a name="post--api-v5-reference-statuses-code-edit"></a> [Создание/редактирование статуса заказа](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-reference-statuses-code-edit)
+```ruby
+body = {
+  status: {
+    name: "Прибыл в пункт выдачи",
+    code: "pickpoint",
+    active: true,
+    group: "complete"
+  }
+}
+RetailcrmApi::Request.reference.statuses("pickpoint").update(body: body).body
+#=> {:success=>true, :id=>19}
+```
 ### <a name="get--api-v5-reference-stores"></a> [Получение списка складов](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-reference-stores)
 ### <a name="post--api-v5-reference-stores-code-edit"></a> [Создание/редактирование сведений о складе](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#post--api-v5-reference-stores-code-edit)
 ### <a name="get--api-v5-reference-units"></a> [Получение списка единиц измерений](https://docs.retailcrm.ru/Developers/API/APIVersions/APIv5#get--api-v5-reference-units)
